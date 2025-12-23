@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Varun Kapoor | Portfolio</title>
+    <style>
+        /* Dark Theme Variables */
+        :root {
+            --color-primary: #e0e0e0;    
+            --color-secondary: #a0a0a0;  
+            --color-background: #0f1113; 
+            --color-card: #1c1f23;       
+            --color-accent: #64ffda;     
+            --font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            color: var(--color-primary);
+            background-color: var(--color-background);
+            /* Dark Grid Background Effect */
+            background-image: 
+                linear-gradient(rgba(100, 255, 218, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 255, 218, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            scroll-behavior: smooth;
+        }
+
+        .container { width: 90%; max-width: 1100px; margin: 0 auto; }
+
+        /* Navigation */
+        header {
+            background-color: rgba(15, 17, 19, 0.95);
+            border-bottom: 1px solid #2d333b;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+        .logo { font-size: 1.5em; font-weight: bold; color: var(--color-accent); letter-spacing: 2px; }
+        nav ul { list-style: none; display: flex; }
+        nav ul li { margin-left: 25px; }
+        nav ul a { text-decoration: none; color: var(--color-primary); font-size: 0.9em; transition: 0.3s; }
+        nav ul a:hover { color: var(--color-accent); }
+
+        /* Hero Section */
+        #hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 60px 0;
+        }
+
+        .hero-content h1 { font-size: 4em; margin-bottom: 0.1em; color: #fff; }
+        .hero-content p { font-size: 1.2em; color: var(--color-secondary); margin-bottom: 2em; }
+
+        .button-group { display: flex; gap: 15px; flex-wrap: wrap;}
+        .button {
+            padding: 12px 28px;
+            background-color: var(--color-accent);
+            color: #0f1113;
+            border: 1px solid var(--color-accent);
+            text-transform: uppercase;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+
+        .button.secondary {
+            background-color: transparent;
+            color: var(--color-accent);
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        /* VK LOGO ICON */
+        .vk-logo-box {
+            width: 300px;
+            height: 300px;
+            background: var(--color-card);
+            border: 2px solid var(--color-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8em;
+            font-weight: 900;
+            color: var(--color-accent);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(100, 255, 218, 0.1);
+            position: relative;
+        }
+
+        .vk-logo-box::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 25px;
+            z-index: -1;
+        }
+
+        /* Sections */
+        .section { padding: 100px 0; }
+        h2 { font-size: 2.2em; color: #fff; margin-bottom: 1.5em; display: flex; align-items: center; }
+        h2::after { content: ''; height: 1px; background: #2d333b; flex: 1; margin-left: 20px; }
+
+        .about-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+        .about-card { background: var(--color-card); padding: 30px; border-radius: 8px; border: 1px solid #2d333b; }
+
+        /* Skills */
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+        .skill-item {
+            background: rgba(100, 255, 218, 0.1);
+            color: var(--color-accent);
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: monospace;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+        .skill-item:hover { border-color: var(--color-accent); }
+
+        /* Projects */
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; }
+        .project-card {
+            background: var(--color-card);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid #2d333b;
+            transition: 0.3s;
+        }
+        .project-card:hover { transform: translateY(-10px); border-color: var(--color-accent); }
+        .project-card h3 { color: #fff; margin-bottom: 15px; }
+
+        /* Contact */
+        #contact-form { max-width: 600px; display: grid; gap: 15px; }
+        input, textarea {
+            background: #1c1f23;
+            border: 1px solid #2d333b;
+            padding: 15px;
+            color: #fff;
+            border-radius: 4px;
+            width: 100%;
+        }
+        input:focus, textarea:focus { outline: 1px solid var(--color-accent); }
+
+        footer { text-align: center; padding: 60px; color: var(--color-secondary); font-size: 0.9em; }
+
+        @media (max-width: 768px) {
+            #hero { flex-direction: column; text-align: center; }
+            .vk-logo-box { width: 200px; height: 200px; font-size: 5em; }
+            .about-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <div class="logo">VK.</div>
+            <ul>
+                <li><a href="#about">01. About</a></li>
+                <li><a href="#skills">02. Skills</a></li>
+                <li><a href="#projects">03. Projects</a></li>
+                <li><a href="#contact">04. Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section id="hero">
+            <div class="hero-content">
+                <p style="color: var(--color-accent); font-family: monospace; margin-bottom: 10px;">&lt;Hello World /&gt;</p>
+                <h1>Varun Kapoor.</h1>
+                <p>IT Engineering Student and Java Developer specializing in building secure database-driven applications.</p>
+                <div class="button-group">
+                    <a href="#contact" class="button">Contact Me</a>
+                    <a href="Resume_Varun_Kapoor.pdf" download="Varun_Kapoor_Resume" class="button secondary">Download CV</a>
+                </div>
+            </div>
+            <div class="vk-logo-box">VK</div>
+        </section>
+
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>I am currently an Information Technology student at <b>Medi-Caps University, Indore</b>. My technical focus is on backend systems, particularly using the Java ecosystem.</p>
+                    <p>I am passionate about building efficient code and have a strong foundation in <b>Data Structures and Algorithms</b>.</p>
+                    
+                    <div class="skills-grid" id="skills" style="margin-top: 30px;">
+                        <div class="skill-item">Core/Advance Java</div>
+                        <div class="skill-item">JDBC & Servlets</div>
+                        <div class="skill-item">C++</div>
+                        <div class="skill-item">MySQL</div>
+                        <div class="skill-item">OOP</div>
+                        <div class="skill-item">HTML/JS</div>
+                    </div>
+                </div>
+                <div class="about-card">
+                    <h3 style="color: var(--color-accent); margin-bottom: 15px;">Education</h3>
+                    <p><b>B.Tech IT</b><br>Medi-Caps University<br>2023 - 2027</p>
+                    <br>
+                    <p><b>High School</b><br>CBSE Board<br>Graduated 2023</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <h2>Experience & Projects</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <p style="color: var(--color-accent); font-family: monospace; font-size: 0.8em;">Desktop Application</p>
+                    <h3>Student Management System</h3>
+                    <p>Developed a secure login module using <b>Java Swing</b> and <b>JDBC</b>. Implemented credential verification against MySQL databases with full input validation.</p>
+                </div>
+                <div class="project-card">
+                    <p style="color: var(--color-accent); font-family: monospace; font-size: 0.8em;">Web Application</p>
+                    <h3>Login & Registration System</h3>
+                    <p>Created a full-stack web flow using <b>JSP</b> and <b>Java Servlets</b>. Managed server-side processing for secure user registration and authentication.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <h2>Get In Touch</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div class="contact-info">
+                    <p>I am currently looking for internship opportunities. Feel free to reach out via email or the contact form.</p>
+                    <p style="margin-top: 20px;">📞 +91 6267389969</p>
+                    <p>📧 varunkapoor1105@gmail.com</p>
+                    <p>📍 Indore, India</p>
+                </div>
+                <form id="contact-form">
+                    <input type="text" placeholder="Name" required>
+                    <input type="email" placeholder="Email" required>
+                    <textarea rows="4" placeholder="Message" required></textarea>
+                    <button type="submit" class="button">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built by Varun Kapoor &copy; 2025</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('contact-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you! Your message has been sent.');
+            form.reset();
+        });
+    </script>
+</body>
+</html>
