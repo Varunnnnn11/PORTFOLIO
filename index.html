@@ -49,16 +49,6 @@
     body { overflow-x: hidden; position: relative; min-height: 100vh; }
 
     /* Background Effects */
-    .background-grid {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
-      background-image:
-              linear-gradient(to right, rgba(58, 123, 213, 0.05) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(58, 123, 213, 0.05) 1px, transparent 1px);
-      background-size: 50px 50px;
-      perspective: 1000px;
-      transform-style: preserve-3d;
-    }
-
     .glow-orb { position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.4; animation: floatOrb 20s infinite alternate; }
     .orb-1 { top: 10%; left: 20%; width: 400px; height: 400px; background: radial-gradient(circle, var(--primary-accent), transparent 70%); }
     .orb-2 { bottom: 10%; right: 15%; width: 500px; height: 500px; background: radial-gradient(circle, var(--secondary-glow), transparent 70%); animation-delay: -5s; }
@@ -178,26 +168,49 @@
     .timeline-subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 5px; }
     .timeline-date { display: inline-block; padding: 4px 10px; background: rgba(255, 255, 255, 0.05); border-radius: 4px; font-size: 0.8rem; color: var(--primary-glow); }
 
-    /* Skills */
-    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-    .skill-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+    /* Skills (interactive tabs) */
+    .skills-interactive { display: flex; gap: 30px; align-items: flex-start; }
+    .skill-tabs { display: flex; flex-direction: column; gap: 10px; flex: 0 0 260px; }
+    .skill-tab {
+      display: flex; align-items: center; gap: 15px;
+      padding: 14px 18px; border-radius: 12px; cursor: pointer;
+      background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color);
+      color: var(--text-muted); font-family: var(--font-body); font-size: 0.95rem; font-weight: 500;
+      text-align: left; transition: var(--transition-smooth); width: 100%;
+    }
+    .skill-tab:hover { border-color: var(--border-highlight); color: var(--text-main); }
+    .skill-tab.active {
+      border-color: var(--border-highlight); color: var(--text-main);
+      background: rgba(0, 210, 255, 0.06); box-shadow: 0 0 20px rgba(0, 210, 255, 0.08);
+    }
+    .skill-tab .skill-icon-wrap { flex-shrink: 0; }
     .skill-icon-wrap {
-      width: 45px; height: 45px; border-radius: 12px;
+      width: 40px; height: 40px; border-radius: 10px;
       background: rgba(58, 123, 213, 0.15);
       display: flex; align-items: center; justify-content: center;
-      color: var(--primary-glow); font-size: 1.2rem;
+      color: var(--primary-glow); font-size: 1.1rem;
       border: 1px solid rgba(0, 210, 255, 0.2);
     }
-    .skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill-panel { flex: 1; min-height: 150px; }
+    .skill-panel-title { font-size: 1.3rem; margin-bottom: 20px; color: var(--text-main); }
+    .skill-tags { display: none; flex-wrap: wrap; gap: 12px; animation: skillFadeIn 0.45s ease; }
+    .skill-tags.active { display: flex; }
+    @keyframes skillFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     .skill-tags span {
-      padding: 8px 14px; background: rgba(255, 255, 255, 0.03);
+      padding: 10px 16px; background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 6px;
       font-size: 0.9rem; color: var(--text-muted); transition: var(--transition-smooth);
     }
-    .skill-category:hover .skill-tags span {
-      border-color: rgba(0, 210, 255, 0.2);
-      color: var(--text-main);
-      background: rgba(0, 210, 255, 0.03);
+    .skill-tags span:hover {
+      border-color: rgba(0, 210, 255, 0.3);
+      color: var(--primary-glow);
+      background: rgba(0, 210, 255, 0.05);
+      transform: translateY(-2px);
+    }
+    @media (max-width: 700px) {
+      .skills-interactive { flex-direction: column; }
+      .skill-tabs { flex-direction: row; flex-wrap: wrap; flex: none; width: 100%; }
+      .skill-tab { width: auto; flex: 1 1 auto; justify-content: center; }
     }
 
     /* Projects */
@@ -241,16 +254,18 @@
     }
     .project-link i { font-size: 1rem; }
 
-    /* Certifications (NEW) */
-    .certifications-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
+    /* Certifications (interactive timeline) */
+    .cert-timeline { display: flex; flex-direction: column; gap: 18px; }
+    .cert-item { transition: border-color var(--transition-smooth); }
+    .cert-toggle {
+      width: 100%; background: none; border: none; padding: 0; margin: 0;
+      cursor: pointer; text-align: left; color: inherit; font: inherit;
     }
     .cert-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 20px; gap: 10px; flex-wrap: wrap;
+      display: flex; align-items: center;
+      gap: 18px; flex-wrap: wrap;
     }
+    .cert-heading { flex: 1 1 200px; min-width: 0; }
     .cert-icon-wrap {
       width: 50px; height: 50px; border-radius: 12px;
       background: rgba(58, 123, 213, 0.15);
@@ -265,7 +280,14 @@
       padding: 5px 12px; border-radius: 50px;
       border: 1px solid rgba(0, 210, 255, 0.2);
       font-weight: 600; letter-spacing: 0.3px; white-space: nowrap;
+      flex-shrink: 0;
     }
+    .cert-chevron {
+      color: var(--text-muted); font-size: 0.9rem;
+      transition: transform var(--transition-smooth), color var(--transition-smooth);
+      flex-shrink: 0;
+    }
+    .cert-item.open .cert-chevron { transform: rotate(180deg); color: var(--primary-glow); }
     .cert-title {
       font-size: 1.2rem; margin-bottom: 6px;
       color: var(--text-main); font-family: var(--font-heading);
@@ -273,7 +295,15 @@
     }
     .cert-issuer {
       color: var(--primary-glow); font-size: 0.9rem;
-      margin-bottom: 15px; font-weight: 500;
+      font-weight: 500;
+    }
+    .cert-desc-wrap {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, margin-top 0.4s ease;
+    }
+    .cert-item.open .cert-desc-wrap {
+      max-height: 200px; margin-top: 18px; padding-top: 18px;
+      border-top: 1px solid var(--border-color);
     }
     .cert-desc { color: var(--text-muted); line-height: 1.6; font-size: 0.92rem; }
 
@@ -333,12 +363,12 @@
       .glitch { font-size: 2.5rem; }
       .cta-group { flex-direction: column; }
       .project-header { flex-direction: column; }
-      .cert-header { flex-direction: column; align-items: flex-start; }
+      .cert-header { flex-wrap: wrap; }
+      .cert-date { order: 3; }
     }
   </style>
 </head>
 <body>
-<div class="background-grid"></div>
 <div class="glow-orb orb-1"></div>
 <div class="glow-orb orb-2"></div>
 <div class="glow-orb orb-3"></div>
@@ -347,6 +377,7 @@
   <a href="#" class="logo">VK<span class="accent">.</span></a>
   <div class="nav-links">
     <a href="#about">About</a>
+    <a href="#experience">Experience</a>
     <a href="#skills">Skills</a>
     <a href="#projects">Projects</a>
     <a href="#certifications">Certifications</a>
@@ -386,8 +417,8 @@
         <div class="card-glow-overlay"></div>
         <div class="card-content">
           <h3 class="card-title">Who I Am</h3>
-          <p>Backend-focused Information Technology student with hands-on experience engineering scalable, production-grade systems in Java and Spring Boot. Demonstrated ability to architect geospatial data pipelines, integrate AI-driven APIs, and secure applications with JWT-based authentication.</p>
-          <p>Passionate about performance optimization, clean system design, and solving complex problems through data-driven backend engineering.</p>
+          <p>Backend-focused Information Technology student with hands-on experience engineering scalable, production-grade systems in Java and Spring Boot, complemented by working knowledge of DevOps practices including Docker, Kubernetes, and CI/CD pipelines. Demonstrated ability to architect geospatial data pipelines, integrate AI-driven APIs, and secure applications with JWT-based authentication.</p>
+          <p>Passionate about performance optimization, clean system design, and data-driven backend engineering.</p>
         </div>
       </div>
       <div class="glass-card education-card hover-glow">
@@ -416,67 +447,75 @@
     </div>
   </section>
 
+  <!-- Experience Section -->
+  <section id="experience" class="section hidden">
+    <h2 class="section-title">Work <span class="accent">Experience</span></h2>
+    <div class="glass-card hover-glow">
+      <div class="card-glow-overlay"></div>
+      <div class="card-content">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <h4 class="timeline-title">IT Intern — Softude Infotech Pvt. Ltd.</h4>
+            <p class="timeline-subtitle">Indore, India</p>
+            <span class="timeline-date">1st – 30th June 2026</span>
+            <p style="color: var(--text-muted); margin-top: 12px; line-height: 1.7;">Developed and deployed backend features using Java and Spring Boot, assisted in containerisation with Docker, and participated in CI/CD deployment workflows as part of the core engineering team.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Skills Section -->
   <section id="skills" class="section hidden">
     <h2 class="section-title">Technical <span class="accent">Arsenal</span></h2>
-    <div class="skills-grid">
-      <div class="skill-category glass-card hover-glow">
-        <div class="card-glow-overlay"></div>
-        <div class="card-content">
-          <div class="skill-header">
-            <div class="skill-icon-wrap"><i class="fa-solid fa-code"></i></div>
-            <h3>Languages</h3>
-          </div>
-          <div class="skill-tags">
-            <span>Java</span><span>C</span><span>C++</span><span>Dart</span><span>JavaScript</span><span>SQL</span><span>HTML/CSS</span>
-          </div>
-        </div>
+    <div class="skills-interactive">
+      <div class="skill-tabs" role="tablist">
+        <button class="skill-tab active" data-target="languages" role="tab" aria-selected="true">
+          <span class="skill-icon-wrap"><i class="fa-solid fa-code"></i></span>
+          <span>Languages</span>
+        </button>
+        <button class="skill-tab" data-target="frameworks" role="tab" aria-selected="false">
+          <span class="skill-icon-wrap"><i class="fa-solid fa-cubes"></i></span>
+          <span>Frameworks</span>
+        </button>
+        <button class="skill-tab" data-target="databases" role="tab" aria-selected="false">
+          <span class="skill-icon-wrap"><i class="fa-solid fa-database"></i></span>
+          <span>Databases</span>
+        </button>
+        <button class="skill-tab" data-target="devops" role="tab" aria-selected="false">
+          <span class="skill-icon-wrap"><i class="fa-solid fa-cloud"></i></span>
+          <span>DevOps &amp; Cloud</span>
+        </button>
+        <button class="skill-tab" data-target="tools" role="tab" aria-selected="false">
+          <span class="skill-icon-wrap"><i class="fa-solid fa-tools"></i></span>
+          <span>Tools</span>
+        </button>
+        <button class="skill-tab" data-target="concepts" role="tab" aria-selected="false">
+          <span class="skill-icon-wrap"><i class="fa-solid fa-brain"></i></span>
+          <span>Concepts</span>
+        </button>
       </div>
-      <div class="skill-category glass-card hover-glow">
+      <div class="glass-card hover-glow skill-panel">
         <div class="card-glow-overlay"></div>
         <div class="card-content">
-          <div class="skill-header">
-            <div class="skill-icon-wrap"><i class="fa-solid fa-cubes"></i></div>
-            <h3>Frameworks</h3>
+          <div class="skill-tags active" id="panel-languages">
+            <span>Java (Core &amp; Advanced)</span><span>C</span><span>C++</span><span>Dart</span><span>JavaScript</span><span>SQL</span><span>HTML/CSS</span>
           </div>
-          <div class="skill-tags">
+          <div class="skill-tags" id="panel-frameworks">
             <span>Spring Boot</span><span>Hibernate</span><span>Servlets</span><span>JSP</span><span>Flutter</span><span>RESTful APIs</span><span>JavaMail API</span>
           </div>
-        </div>
-      </div>
-      <div class="skill-category glass-card hover-glow">
-        <div class="card-glow-overlay"></div>
-        <div class="card-content">
-          <div class="skill-header">
-            <div class="skill-icon-wrap"><i class="fa-solid fa-database"></i></div>
-            <h3>Databases</h3>
-          </div>
-          <div class="skill-tags">
+          <div class="skill-tags" id="panel-databases">
             <span>PostgreSQL</span><span>PostGIS</span><span>MySQL</span><span>Redis</span>
           </div>
-        </div>
-      </div>
-      <div class="skill-category glass-card hover-glow">
-        <div class="card-glow-overlay"></div>
-        <div class="card-content">
-          <div class="skill-header">
-            <div class="skill-icon-wrap"><i class="fa-solid fa-tools"></i></div>
-            <h3>Tools</h3>
+          <div class="skill-tags" id="panel-devops">
+            <span>Linux</span><span>Git</span><span>GitHub</span><span>Docker</span><span>Kubernetes</span><span>CI/CD</span>
           </div>
-          <div class="skill-tags">
-            <span>Git</span><span>Docker</span><span>Postman</span><span>Leaflet.js</span><span>Mapbox</span><span>Linux</span>
+          <div class="skill-tags" id="panel-tools">
+            <span>Postman</span><span>Leaflet.js</span><span>Mapbox</span>
           </div>
-        </div>
-      </div>
-      <div class="skill-category glass-card hover-glow">
-        <div class="card-glow-overlay"></div>
-        <div class="card-content">
-          <div class="skill-header">
-            <div class="skill-icon-wrap"><i class="fa-solid fa-brain"></i></div>
-            <h3>Concepts</h3>
-          </div>
-          <div class="skill-tags">
-            <span>OOP</span><span>DSA</span><span>DBMS</span><span>Computer Networks</span><span>Operating Systems</span>
+          <div class="skill-tags" id="panel-concepts">
+            <span>OOP</span><span>Data Structures &amp; Algorithms</span><span>DBMS</span><span>Computer Networks</span><span>Operating Systems</span><span>SDLC</span>
           </div>
         </div>
       </div>
@@ -510,14 +549,16 @@
           </div>
           <div class="project-body">
             <ul class="feature-list">
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Architected the full backend for a gamified, real-world fitness platform supporting concurrent multi-user territory ownership using PostGIS spatial indexing.</li>
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Reduced GPS processing overhead by ~40% using a 30-second coordinate batching pipeline and a 6-layer Kalman filter algorithm — eliminating hardware noise and blocking GPS spoofing before data reaches the database.</li>
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Eliminated redundant leaderboard database queries by integrating Redis caching for sub-millisecond cache-hit responses at scale.</li>
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Hardened API endpoints implementing stateless JWT authentication with rotating access/refresh tokens.</li>
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Automated database lifecycle management by building Spring Scheduler jobs to execute zone-decay cleanup routines.</li>
+              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Architected the full backend for a gamified fitness platform where users claim map territories via GPS, supporting concurrent multi-user ownership through PostGIS spatial indexing on PostgreSQL.</li>
+              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Reduced GPS processing overhead ~40% with a 30-second coordinate batching pipeline and a 6-layer Kalman filter, eliminating hardware noise and blocking GPS spoofing.</li>
+              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Eliminated redundant leaderboard queries via Redis caching, enabling sub-millisecond cache-hit responses on live rankings at scale.</li>
+              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Hardened API endpoints with stateless JWT authentication using rotating access/refresh token pairs across Flutter and Spring Boot.</li>
             </ul>
           </div>
           <div class="project-actions">
+            <a href="https://www.strideun.com" target="_blank" rel="noopener" class="project-link">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Site
+            </a>
             <a href="https://github.com/Varunnnnn11/strideUN-Backend" target="_blank" rel="noopener" class="project-link">
               <i class="fa-brands fa-github"></i> Backend Repo
             </a>
@@ -550,11 +591,10 @@
           </div>
           <div class="project-body">
             <ul class="feature-list">
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Engineered a full-stack platform enabling EV owners and hosts to list, discover, and book charging stations via an interactive Leaflet.js map.</li>
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Designed an AI-powered waypoint algorithm using the Groq API (Llama 3) and the Haversine formula to recommend optimal charging stops based on real-time battery and range inputs.</li>
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Integrated live data from the OpenChargeMap API to surface real-time station availability, connector types, and pricing without page reloads.</li>
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Modeled complex many-to-many relationships between Users, Stations, and Bookings using Hibernate ORM annotations.</li>
-              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Increased booking completion confidence via automated transactional email confirmations through the JavaMail API.</li>
+              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Engineered a full-stack platform for listing, discovering, and booking EV charging stations, managing booking state through a normalized MySQL schema via Hibernate ORM.</li>
+              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Designed an AI-powered waypoint algorithm combining Groq API (Llama 3), the Haversine formula, and live battery/range inputs to recommend optimal charging stops.</li>
+              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Integrated live OpenChargeMap API data into an interactive Leaflet.js map for real-time station availability, connector types, and pricing.</li>
+              <li><i class="fa-solid fa-bolt accent-icon-small"></i> Automated transactional email confirmations via JavaMail API for booking receipts and wallet summaries.</li>
             </ul>
           </div>
           <div class="project-actions">
@@ -567,60 +607,88 @@
     </div>
   </section>
 
-  <!-- Certifications Section (NEW) -->
+  <!-- Certifications Section (interactive) -->
   <section id="certifications" class="section hidden">
     <h2 class="section-title">Professional <span class="accent">Certifications</span></h2>
-    <div class="certifications-grid">
+    <div class="cert-timeline">
 
-      <div class="glass-card hover-glow">
+      <div class="glass-card hover-glow cert-item">
         <div class="card-glow-overlay"></div>
         <div class="card-content">
-          <div class="cert-header">
-            <div class="cert-icon-wrap"><i class="fa-brands fa-java"></i></div>
-            <span class="cert-date">Feb 2025 – May 2025</span>
+          <button class="cert-toggle" aria-expanded="false">
+            <div class="cert-header">
+              <div class="cert-icon-wrap"><i class="fa-brands fa-java"></i></div>
+              <div class="cert-heading">
+                <h3 class="cert-title">Java 2.0 — Core &amp; Advanced</h3>
+                <p class="cert-issuer">Universal Informatics, Indore</p>
+              </div>
+              <span class="cert-date">Feb – May 2025</span>
+              <i class="fa-solid fa-chevron-down cert-chevron"></i>
+            </div>
+          </button>
+          <div class="cert-desc-wrap">
+            <p class="cert-desc">Hands-on training program covering Core Java, Object-Oriented Programming, and Advanced Java concepts.</p>
           </div>
-          <h3 class="cert-title">Java 2.0 — Core &amp; Advanced</h3>
-          <p class="cert-issuer">Universal Informatics, Indore</p>
-          <p class="cert-desc">Hands-on training program covering Core Java, Object-Oriented Programming, and Advanced Java concepts.</p>
         </div>
       </div>
 
-      <div class="glass-card hover-glow">
+      <div class="glass-card hover-glow cert-item">
         <div class="card-glow-overlay"></div>
         <div class="card-content">
-          <div class="cert-header">
-            <div class="cert-icon-wrap"><i class="fa-solid fa-leaf"></i></div>
-            <span class="cert-date">Sept 2025 – Nov 2025</span>
+          <button class="cert-toggle" aria-expanded="false">
+            <div class="cert-header">
+              <div class="cert-icon-wrap"><i class="fa-solid fa-leaf"></i></div>
+              <div class="cert-heading">
+                <h3 class="cert-title">Spring &amp; Spring Boot</h3>
+                <p class="cert-issuer">Universal Informatics, Indore</p>
+              </div>
+              <span class="cert-date">Sept – Nov 2025</span>
+              <i class="fa-solid fa-chevron-down cert-chevron"></i>
+            </div>
+          </button>
+          <div class="cert-desc-wrap">
+            <p class="cert-desc">J2EE Enterprise Edition industrial training covering Spring Framework, Spring Boot, REST APIs, Hibernate ORM, and enterprise application development.</p>
           </div>
-          <h3 class="cert-title">Spring &amp; Spring Boot</h3>
-          <p class="cert-issuer">Universal Informatics, Indore</p>
-          <p class="cert-desc">J2EE Enterprise Edition industrial training covering Spring Framework, Spring Boot, REST APIs, Hibernate ORM, and enterprise application development.</p>
         </div>
       </div>
 
-      <div class="glass-card hover-glow">
+      <div class="glass-card hover-glow cert-item">
         <div class="card-glow-overlay"></div>
         <div class="card-content">
-          <div class="cert-header">
-            <div class="cert-icon-wrap"><i class="fa-brands fa-python"></i></div>
-            <span class="cert-date">October 2025</span>
+          <button class="cert-toggle" aria-expanded="false">
+            <div class="cert-header">
+              <div class="cert-icon-wrap"><i class="fa-brands fa-python"></i></div>
+              <div class="cert-heading">
+                <h3 class="cert-title">Python 3.4.3 Training</h3>
+                <p class="cert-issuer">EduPyramids, SINE, IIT Bombay</p>
+              </div>
+              <span class="cert-date">Oct 2025</span>
+              <i class="fa-solid fa-chevron-down cert-chevron"></i>
+            </div>
+          </button>
+          <div class="cert-desc-wrap">
+            <p class="cert-desc">Completed Spoken Tutorial Project examination conducted remotely from IIT Bombay. Credits: 4.</p>
           </div>
-          <h3 class="cert-title">Python 3.4.3 Training</h3>
-          <p class="cert-issuer">EduPyramids, SINE, IIT Bombay</p>
-          <p class="cert-desc">Completed Spoken Tutorial Project examination conducted remotely from IIT Bombay. Credits: 4.</p>
         </div>
       </div>
 
-      <div class="glass-card hover-glow">
+      <div class="glass-card hover-glow cert-item">
         <div class="card-glow-overlay"></div>
         <div class="card-content">
-          <div class="cert-header">
-            <div class="cert-icon-wrap"><i class="fa-brands fa-linux"></i></div>
-            <span class="cert-date">March 2025</span>
+          <button class="cert-toggle" aria-expanded="false">
+            <div class="cert-header">
+              <div class="cert-icon-wrap"><i class="fa-brands fa-linux"></i></div>
+              <div class="cert-heading">
+                <h3 class="cert-title">Linux Training</h3>
+                <p class="cert-issuer">Spoken Tutorial Project, IIT Bombay</p>
+              </div>
+              <span class="cert-date">Mar 2025</span>
+              <i class="fa-solid fa-chevron-down cert-chevron"></i>
+            </div>
+          </button>
+          <div class="cert-desc-wrap">
+            <p class="cert-desc">Completed examination conducted remotely from IIT Bombay covering Linux fundamentals, shell, and system administration. Credits: 2.</p>
           </div>
-          <h3 class="cert-title">Linux Training</h3>
-          <p class="cert-issuer">Spoken Tutorial Project, IIT Bombay</p>
-          <p class="cert-desc">Completed examination conducted remotely from IIT Bombay covering Linux fundamentals, shell, and system administration. Credits: 2.</p>
         </div>
       </div>
 
@@ -723,7 +791,19 @@
       });
     });
 
-    // 4. Parallax effect for glow orbs
+    // 4. Skills interactive tabs
+    document.querySelectorAll('.skill-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.skill-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        document.querySelectorAll('.skill-tags').forEach(panel => panel.classList.remove('active'));
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        const target = document.getElementById(`panel-${tab.dataset.target}`);
+        if (target) target.classList.add('active');
+      });
+    });
+
+    // 5. Parallax effect for glow orbs
     const orbs = document.querySelectorAll('.glow-orb');
     window.addEventListener('scroll', () => {
       const scrolled = window.scrollY;
@@ -733,7 +813,16 @@
       });
     });
 
-    // 5. Formspree success styling
+    // 6. Certifications interactive accordion
+    document.querySelectorAll('.cert-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.cert-item');
+        const isOpen = item.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen);
+      });
+    });
+
+    // 7. Formspree success styling
     const observerSuccess = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.target.hasAttribute('data-fs-success') && mutation.target.innerHTML.trim() !== '') {
